@@ -63,15 +63,16 @@ class BallBrockenExceptionTest {
 					leftBound = middle + 1;
 				} 
 				catch (Exception e) {
+					rightBound = middle - 1;
 					try {
-						bbf.checkFloor(middle - 1);
+						bbf.checkFloor(rightBound);
 						throw new resultException(middle);
 					} 
 					catch ( resultException e1) {
 						throw e1;
 					}
-					catch (Exception e1){
-						rightBound = middle - 1;
+					catch (Exception e1) {
+						
 					}
 				}
 			}
