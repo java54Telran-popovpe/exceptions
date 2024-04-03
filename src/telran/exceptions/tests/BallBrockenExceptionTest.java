@@ -56,7 +56,7 @@ class BallBrockenExceptionTest {
 		int rightBound = N_FLOORS;
 		int foundFloor = -1;
 		try {
-			while( leftBound <= rightBound) {
+			while( true ) {
 				int middle = (leftBound + rightBound) >>> 1;
 				try {
 					bbf.checkFloor(middle);
