@@ -12,7 +12,7 @@ class BallBrockenExceptionTest {
 	private static final int NUMBER_OF_TESTS = 1000;
 
 	@Test
-	void test() {
+	void test() throws Exception {
 		for ( int i = 0; i < NUMBER_OF_TESTS ; i++ ) {
 			BallBrokenFlow bbf = new BallBrokenFlow(N_FLOORS);
 			assertEquals(bbf.getBrokenFlow(), getMinBrockenFloor(bbf));
@@ -51,27 +51,46 @@ class BallBrockenExceptionTest {
 		return result;
 	}
 	
-	private Integer getMinBrockenFloor(BallBrokenFlow bbf) {
-		// TODO Auto-generated method stub
+	private Integer getMinBrockenFloor(BallBrokenFlow bbf) throws Exception {
 		int leftBound = 1;
 		int rightBound = N_FLOORS;
 		int foundFloor = -1;
-		while( leftBound <= rightBound && foundFloor == -1) {
-			int middle = (leftBound + rightBound) >>> 1;
-			try {
-				bbf.checkFloor(middle);
-				leftBound = middle + 1;
-			}
-			catch (Exception e) {
+		try {
+			while( leftBound <= rightBound) {
+				int middle = (leftBound + rightBound) >>> 1;
 				try {
-					bbf.checkFloor(middle - 1);
-					foundFloor = middle;
+					bbf.checkFloor(middle);
+					leftBound = middle + 1;
+				} 
+				catch (Exception e) {
+					try {
+						bbf.checkFloor(middle - 1);
+						throw new resultException(middle);
+					} 
+					catch ( resultException e1) {
+						throw e1;
+					}
+					catch (Exception e1){
+						rightBound = middle - 1;
+					}
 				}
-				catch (Exception e1) {
-					rightBound = middle - 1;
-				}	
 			}
 		}
+		catch (resultException e1) {
+			foundFloor = e1.getResult();
+		}
 		return foundFloor;
+	}
+}
+
+@SuppressWarnings("serial")
+class resultException extends Exception {
+	private int result;
+
+	public resultException( int result) {
+		this.result = result;
+	}
+	public int getResult() {
+		return result;
 	}
 }
